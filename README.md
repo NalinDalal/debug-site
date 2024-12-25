@@ -28,15 +28,10 @@ Admin User:
 - Email: [admin@college.edu](mailto:admin@college.edu)
 - Password: admin123
 
-what to do next: allow for code-editor like repl.it
-
-most of work is done b/w 2:30 to 5:30 pm 25.12.2024
-
-done with it
 what is done:
 
 - done with eveything except db
-- done with user auth
+- done with user auth{not implemented any 3rd party}
 - done with profiles
 - done with sponsors page
 - done with team
@@ -44,6 +39,20 @@ what is done:
 - done with events
 - done with notes
 - done with timeline page
+
+what to do next: 
+
+- 3rd party auth like Oauth,github,Clerk
+- new relic setup for monitoring, logging
+- allow for code-editor like repl.it
+- Kubernetes Containerization
+    * Debugging Steps:
+        * Ensure the application is properly containerized and works locally.
+        * Check Kubernetes deployment configurations and logs for issues during deployment.
+        * Monitor pod health and container logs.
+
+
+most of work is done b/w 2:30 pm to 12:00 am 25.12.2024
 
 production branch:
 
