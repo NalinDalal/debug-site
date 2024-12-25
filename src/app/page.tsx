@@ -1,101 +1,158 @@
-import Image from "next/image";
+"use client";
+
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Header } from "@/components/Header";
+import { useAuth } from "@/contexts/AuthContext";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const { user, isAdmin } = useAuth();
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+  return (
+    <>
+      <Header />
+      <main className="flex flex-col justify-center items-center p-8 min-h-screen text-white bg-gray-900">
+        {/* Hero Section */}
+        <section className="py-12 w-full text-center bg-gray-800">
+          <h1 className="mb-4 text-4xl font-bold">Welcome to Debug</h1>
+          <p className="mb-6 text-lg text-gray-400">
+            Connect, collaborate, and grow with our community. Explore events,
+            courses, and more!
+          </p>
+          {!user && (
+            <Link href="/login">
+              <Button>Get Started</Button>
+            </Link>
+          )}
+        </section>
+
+        {/* Features Section */}
+        <section className="container py-12 mx-auto">
+          <h2 className="mb-8 text-3xl font-bold text-center">Features</h2>
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {[
+              {
+                title: "Personalized Profile",
+                description:
+                  "Get recommendations tailored to your interests and academic goals.",
+              },
+              {
+                title: "Event Management",
+                description:
+                  "Register for events and stay updated with the latest activities.",
+              },
+              {
+                title: "Notes Sharing",
+                description:
+                  "Access study notes shared by peers or upload your own.",
+              },
+              {
+                title: "Admin Dashboard",
+                description:
+                  "Admins can manage events, users, and platform content easily.",
+              },
+              {
+                title: "Certification Tracking",
+                description:
+                  "Keep track of your certifications and achievements in one place.",
+              },
+              {
+                title: "Community Interaction",
+                description:
+                  "Collaborate with peers through forums, chats, and discussions.",
+              },
+            ].map((feature, index) => (
+              <Card
+                key={index}
+                className="p-6 bg-gray-800 shadow-md transition-shadow hover:shadow-lg"
+              >
+                <CardHeader>
+                  <CardTitle>{feature.title}</CardTitle>
+                  <CardDescription>{feature.description}</CardDescription>
+                </CardHeader>
+              </Card>
+            ))}
+          </div>
+        </section>
+
+        {/* Logged-In User Section */}
+        {user && (
+          <section className="mx-auto mb-12 w-full max-w-xl">
+            <Card className="w-full bg-gray-800">
+              <CardHeader>
+                <CardTitle>Personalized Suggestions</CardTitle>
+                <CardDescription>
+                  We've got some great recommendations for you!
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="mb-4">
+                  Check out your profile to see personalized suggestions for:
+                </p>
+                <ul className="pl-5 mb-4 list-disc">
+                  <li>Courses</li>
+                  <li>Certifications</li>
+                  <li>Study Notes</li>
+                  <li>Upcoming Events</li>
+                </ul>
+                <Link href="/profile">
+                  <Button>View Suggestions</Button>
+                </Link>
+              </CardContent>
+            </Card>
+          </section>
+        )}
+
+        {/* Social Links Section */}
+        <section className="py-8 w-full text-center text-white bg-gray-800">
+          <h2 className="mb-4 text-2xl font-bold">Follow Us</h2>
+          <p className="mb-6 text-gray-400">
+            Stay updated with the latest news and events from our community.
+          </p>
+          <div className="flex justify-center space-x-6">
+            <a
+              href="https://facebook.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-2xl text-gray-300 hover:text-blue-500"
+            >
+              <FaFacebook />
+            </a>
+            <a
+              href="https://twitter.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-2xl text-gray-300 hover:text-blue-400"
+            >
+              <FaTwitter />
+            </a>
+            <a
+              href="https://instagram.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-2xl text-gray-300 hover:text-pink-500"
+            >
+              <FaInstagram />
+            </a>
+            <a
+              href="https://linkedin.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-2xl text-gray-300 hover:text-blue-700"
+            >
+              <FaLinkedin />
+            </a>
+          </div>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+    </>
   );
 }
