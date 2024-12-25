@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { User, UserRole } from "@/types/user";
+import { User } from "../../types/user";
 
 interface AuthContextType {
   user: User | null;
@@ -35,12 +35,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const login = async (email: string, password: string) => {
     // Mock login logic
+    console.log(password); // Log password or add validation logic if needed
+
+    // Replace with actual backend logic to validate user and retrieve role
     const mockUser: User = {
       id: "1",
       firstName: "John",
       lastName: "Doe",
       email: email,
-      role: email.includes("admin") ? "admin" : "user",
+      role: email === "admin@example.com" ? "admin" : "user", // Explicit admin role based on email (you can replace this logic with actual backend logic)
       joinedDate: new Date().toISOString(),
     };
     setUser(mockUser);
@@ -52,7 +55,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     localStorage.removeItem("user");
   };
 
-  const isAdmin = user?.role === "admin";
+  const isAdmin = user?.role === "admin"; // Check for admin role
 
   return (
     <AuthContext.Provider value={{ user, login, logout, isAdmin }}>

@@ -31,3 +31,23 @@ Admin User:
 what to do next: allow for code-editor like repl.it
 
 most of work is done b/w 2:30 to 5:30 pm 25.12.2024
+
+done with it
+what is done:
+
+- done with eveything except db
+- done with user auth
+- done with profiles
+- done with sponsors page
+- done with team
+- done with websockets for chatting
+- done with events
+- done with notes
+- done with timeline page
+
+production branch:
+
+```bash
+npm run build
+npm run start
+```

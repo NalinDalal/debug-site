@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -12,7 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Video, Mic, MicOff, PhoneOff } from "lucide-react";
-import { io } from "socket.io-client";
+import { io, Socket } from "socket.io-client"; // Import Socket type
 
 interface Message {
   id: string;
@@ -34,7 +32,7 @@ export function ChatRoom({ roomName }: ChatRoomProps) {
   const [isVideoOn, setIsVideoOn] = useState(false);
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
-  const socketRef = useRef<any>(null);
+  const socketRef = useRef<Socket | null>(null); // Correctly type socketRef
   const peerConnectionRef = useRef<RTCPeerConnection | null>(null);
   const localStreamRef = useRef<MediaStream | null>(null);
 
@@ -53,7 +51,7 @@ export function ChatRoom({ roomName }: ChatRoomProps) {
     socketRef.current.on("ice_candidate", handleNewICECandidate);
 
     return () => {
-      socketRef.current.disconnect();
+      socketRef.current?.disconnect();
       if (peerConnectionRef.current) {
         peerConnectionRef.current.close();
       }
@@ -70,7 +68,7 @@ export function ChatRoom({ roomName }: ChatRoomProps) {
       };
       setMessages((prevMessages) => [...prevMessages, message]);
       setNewMessage("");
-      socketRef.current.emit("chat_message", message);
+      socketRef.current?.emit("chat_message", message); // Safely call emit
     }
   };
 
@@ -106,7 +104,7 @@ export function ChatRoom({ roomName }: ChatRoomProps) {
       });
       peerConnectionRef.current.onicecandidate = (event) => {
         if (event.candidate) {
-          socketRef.current.emit("ice_candidate", event.candidate);
+          socketRef.current?.emit("ice_candidate", event.candidate); // Safely call emit
         }
       };
       peerConnectionRef.current.ontrack = (event) => {
@@ -116,7 +114,7 @@ export function ChatRoom({ roomName }: ChatRoomProps) {
       };
       const offer = await peerConnectionRef.current.createOffer();
       await peerConnectionRef.current.setLocalDescription(offer);
-      socketRef.current.emit("offer", offer);
+      socketRef.current?.emit("offer", offer); // Safely call emit
     } catch (err) {
       console.error("Error starting call:", err);
     }
@@ -149,7 +147,7 @@ export function ChatRoom({ roomName }: ChatRoomProps) {
       );
       const answer = await peerConnectionRef.current.createAnswer();
       await peerConnectionRef.current.setLocalDescription(answer);
-      socketRef.current.emit("answer", answer);
+      socketRef.current?.emit("answer", answer); // Safely call emit
     }
   };
 

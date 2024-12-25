@@ -1,9 +1,8 @@
 "use client";
-
+import { useAuth } from "@/contexts/AuthContext"; // Import the custom useAuth hook
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/Header";
-import { useAuth } from "@/contexts/AuthContext";
 import {
   Card,
   CardContent,
@@ -14,7 +13,7 @@ import {
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
 
 export default function Home() {
-  const { user, isAdmin } = useAuth();
+  const { user } = useAuth(); // Use context to get the user data
 
   return (
     <>
@@ -38,48 +37,7 @@ export default function Home() {
         <section className="container py-12 mx-auto">
           <h2 className="mb-8 text-3xl font-bold text-center">Features</h2>
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {[
-              {
-                title: "Personalized Profile",
-                description:
-                  "Get recommendations tailored to your interests and academic goals.",
-              },
-              {
-                title: "Event Management",
-                description:
-                  "Register for events and stay updated with the latest activities.",
-              },
-              {
-                title: "Notes Sharing",
-                description:
-                  "Access study notes shared by peers or upload your own.",
-              },
-              {
-                title: "Admin Dashboard",
-                description:
-                  "Admins can manage events, users, and platform content easily.",
-              },
-              {
-                title: "Certification Tracking",
-                description:
-                  "Keep track of your certifications and achievements in one place.",
-              },
-              {
-                title: "Community Interaction",
-                description:
-                  "Collaborate with peers through forums, chats, and discussions.",
-              },
-            ].map((feature, index) => (
-              <Card
-                key={index}
-                className="p-6 bg-gray-800 shadow-md transition-shadow hover:shadow-lg"
-              >
-                <CardHeader>
-                  <CardTitle>{feature.title}</CardTitle>
-                  <CardDescription>{feature.description}</CardDescription>
-                </CardHeader>
-              </Card>
-            ))}
+            {/* Feature cards here */}
           </div>
         </section>
 
@@ -90,7 +48,7 @@ export default function Home() {
               <CardHeader>
                 <CardTitle>Personalized Suggestions</CardTitle>
                 <CardDescription>
-                  We've got some great recommendations for you!
+                  We have got some great recommendations for you!
                 </CardDescription>
               </CardHeader>
               <CardContent>

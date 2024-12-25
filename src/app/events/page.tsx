@@ -12,16 +12,11 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import emailjs from "emailjs-com"; // Import EmailJS
 
 const EventsPage = () => {
-  // Initial events data
+  const user = { isAdmin: true }; // Example user object. Replace with real data.
+
   const [events, setEvents] = useState([
     {
       id: 1,
@@ -46,24 +41,21 @@ const EventsPage = () => {
     },
   ]);
 
-  // State for new event form
   const [newEvent, setNewEvent] = useState({
     title: "",
     date: "",
     description: "",
   });
 
-  // State for tracking registrations
-  const [registrations, setRegistrations] = useState({});
-
-  // State for admin mode
+  const [registrations, setRegistrations] = useState<{
+    [key: number]: boolean;
+  }>(
+    {}, // Initialize as an empty object
+  );
   const [isAdmin, setIsAdmin] = useState(false);
-
-  // State for showing success messages
   const [showSuccess, setShowSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
 
-  // Handler for adding new events
   const handleAddEvent = () => {
     if (newEvent.title && newEvent.date && newEvent.description) {
       const newId =
@@ -74,30 +66,70 @@ const EventsPage = () => {
     }
   };
 
-  // Handler for deleting events
-  const handleDeleteEvent = (id) => {
+  const handleDeleteEvent = (id: number) => {
     setEvents(events.filter((event) => event.id !== id));
     showSuccessAlert("Event deleted successfully!");
   };
 
-  // Handler for registering/deregistering
-  const handleRegistration = (eventId) => {
+  // Send Email function
+  const sendRegistrationEmail = (eventTitle: string, userEmail: string) => {
+    emailjs
+      .send(
+        "env.service_id", // Replace with your service ID from EmailJS
+        "template_id", // Replace with your template ID from EmailJS
+        {
+          user_email: userEmail,
+          event_title: eventTitle,
+        },
+        "user_id", // Replace with your user ID from EmailJS
+      )
+      .then(
+        (response) => {
+          console.log("Email sent successfully:", response);
+        },
+        (error) => {
+          console.log("Error sending email:", error);
+        },
+      );
+  };
+
+  const handleRegistration = (eventId: number, userEmail: string) => {
     setRegistrations((prev) => ({
       ...prev,
-      [eventId]: !prev[eventId],
+      [eventId]: !prev[eventId], //@ts-expect-erro: it maybe empty
     }));
+
     showSuccessAlert(
       registrations[eventId]
         ? "Successfully deregistered from event!"
         : "Successfully registered for event!",
     );
+
+    // Send the email after registration
+    if (!registrations[eventId]) {
+      const event = events.find((event) => event.id === eventId);
+
+      // Check if the event is defined
+      if (event) {
+        sendRegistrationEmail(event.title, userEmail); // Pass user email here
+      } else {
+        console.error("Event not found");
+      }
+    }
   };
 
-  // Helper function for showing success alerts
-  const showSuccessAlert = (message) => {
+  const showSuccessAlert = (message: string) => {
     setSuccessMessage(message);
     setShowSuccess(true);
     setTimeout(() => setShowSuccess(false), 3000);
+  };
+
+  const toggleAdminMode = () => {
+    if (!user.isAdmin) {
+      alert("You are not an admin and cannot access admin mode.");
+      return;
+    }
+    setIsAdmin(!isAdmin);
   };
 
   return (
@@ -109,7 +141,7 @@ const EventsPage = () => {
             <h1 className="text-3xl font-bold">Upcoming Events</h1>
             <Button
               variant={isAdmin ? "destructive" : "outline"}
-              onClick={() => setIsAdmin(!isAdmin)}
+              onClick={toggleAdminMode}
             >
               {isAdmin ? "Exit Admin Mode" : "Admin Mode"}
             </Button>
@@ -171,7 +203,9 @@ const EventsPage = () => {
                     variant={
                       registrations[event.id] ? "destructive" : "default"
                     }
-                    onClick={() => handleRegistration(event.id)}
+                    onClick={() =>
+                      handleRegistration(event.id, "nalindalal@gmail.com")
+                    } // Pass the actual user email
                   >
                     {registrations[event.id] ? "Deregister" : "Register"}
                   </Button>
