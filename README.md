@@ -50,7 +50,7 @@ what to do next:
         * Ensure the application is properly containerized and works locally.
         * Check Kubernetes deployment configurations and logs for issues during deployment.
         * Monitor pod health and container logs.
-
+- In House creation and registration for events
 
 most of work is done b/w 2:30 pm to 12:00 am 25.12.2024
 
