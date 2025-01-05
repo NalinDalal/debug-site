@@ -40,18 +40,6 @@ what is done:
 - done with notes
 - done with timeline page
 
-what to do next: 
-
-- 3rd party auth like Oauth,github,Clerk
-- new relic setup for monitoring, logging
-- allow for code-editor like repl.it
-- Kubernetes Containerization
-    * Debugging Steps:
-        * Ensure the application is properly containerized and works locally.
-        * Check Kubernetes deployment configurations and logs for issues during deployment.
-        * Monitor pod health and container logs.
-- In House creation and registration for events
-
 most of work is done b/w 2:30 pm to 12:00 am 25.12.2024
 
 production branch:
@@ -66,3 +54,12 @@ npm run start
 - repl.it like code editor
 - in house contests like leetcode etc
 - discord validatiion and bot automation for subgroup joining via admin request on discord server
+- 3rd party auth like Oauth,github,Clerk
+- new relic setup for monitoring, logging
+- allow for code-editor like repl.it
+- Kubernetes Containerization
+  - Debugging Steps:
+    - Ensure the application is properly containerized and works locally.
+    - Check Kubernetes deployment configurations and logs for issues during deployment.
+    - Monitor pod health and container logs.
+- In House creation and registration for events
