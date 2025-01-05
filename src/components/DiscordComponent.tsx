@@ -9,35 +9,72 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {Discord, DiscordSchema} from "@/schemas/Discord";
 import {useToast} from "@/hooks/use-toast";
 import {ToastAction} from "@/components/ui/toast";
-import {Toaster} from "@/components/ui/toaster";
+import {useDiscord} from "@/contexts/DiscordContext";
 
 const DiscordComponent: React.FC = () => {
+    const {discordStat, sendJoinRequest, loading} = useDiscord();
     const {register, handleSubmit, reset, formState: {errors}} = useForm<Discord>({
         resolver: zodResolver(DiscordSchema)
     });
-    const [loading, setLoading] = React.useState<boolean>(false);
     const {toast} = useToast()
     const onSubmit = async (data: Discord) => {
         console.log(data);
         try {
-            setLoading(true);
+            console.log("Discord Stats", discordStat);
+            if (discordStat.email === data.email && discordStat.isMember) {
+                toast({
+                    title: "Error",
+                    description: "You are already a member of our Discord server!",
+                    variant: "destructive",
+                    className: "bg-red-500 text-white",
+                    action: (
+                        <ToastAction className={"hover:text-gray-900 border border-green-500"} altText={"close"}
+                                     onClick={() => console.log("Undoing...")}>Close</ToastAction>
+                    )
+                })
+                return;
+            }
+            if (discordStat.email === data.email && discordStat.isRequestSent) {
+                toast({
+                    title: "Error",
+                    description: "You have already sent a request to join our Discord server!",
+                    variant: "destructive",
+                    className: "bg-red-500 text-white",
+                    action: (
+                        <ToastAction className={"hover:text-gray-900 border border-green-500"} altText={"close"}
+                                     onClick={() => console.log("Undoing...")}>Close</ToastAction>
+                    )
+                })
+                return;
+            }
+            await sendJoinRequest(data.email);
             toast({
                 title: "Success",
                 description: "You have successfully joined our Discord server!",
                 variant: "default",
-                className: "bg-gray-900 text-white",
+                className: "bg-gray-900 text-white border border-green-500",
 
                 action: (
-                    <ToastAction className={"hover:text-gray-900"} altText={"close"}
+                    <ToastAction className={"hover:text-gray-900 border border-green-500"} altText={"close"}
                                  onClick={() => console.log("Undoing...")}>Close</ToastAction>
                 )
             })
-        } catch (e) {
+
+        } catch
+            (e) {
             console.error(e);
-            alert("An error occurred while joining the Discord server. Please try again later.");
+            toast({
+                title: "Error",
+                description: "An error occurred while joining the Discord server. Please try again later.",
+                variant: "destructive",
+                className: "bg-red-500 text-white",
+                action: (
+                    <ToastAction className={"hover:text-gray-900 border border-green-500"} altText={"close"}
+                                 onClick={() => console.log("Undoing...")}>Close</ToastAction>
+                )
+            })
         } finally {
             reset();
-            setLoading(false);
         }
     }
     return (
@@ -66,7 +103,6 @@ const DiscordComponent: React.FC = () => {
                     </form>
                 </CardContent>
             </Card>
-            <Toaster/>
         </main>
     )
 }

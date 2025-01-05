@@ -13,8 +13,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="TypeScript JSX File" />
         <option value="TypeScript File" />
+        <option value="TypeScript JSX File" />
       </list>
     </option>
   </component>
@@ -38,6 +38,7 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "npm.dev.executor": "Run",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
     "ts.external.directory.path": "D:\\WEB DEVELOPMENT\\DEBUG-OIST\\debug-site\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   }
@@ -69,7 +70,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1736073780110</updated>
-      <workItem from="1736073786111" duration="6150000" />
+      <workItem from="1736073786111" duration="12198000" />
     </task>
     <servers />
   </component>
