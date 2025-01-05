@@ -60,3 +60,9 @@ production branch:
 npm run build
 npm run start
 ```
+
+## what to do next:
+
+- repl.it like code editor
+- in house contests like leetcode etc
+- discord validatiion and bot automation for subgroup joining via admin request on discord server
