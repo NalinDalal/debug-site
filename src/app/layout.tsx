@@ -3,6 +3,8 @@ import {Inter} from 'next/font/google'
 import {AuthProvider} from '@/contexts/AuthContext'
 import React from "react";
 import {Toaster} from "@/components/ui/toaster";
+import Providers from "@/app/providers";
+import {getSession} from "@/lib/auth";
 
 const inter = Inter({subsets: ['latin']})
 
@@ -11,18 +13,23 @@ export const metadata = {
     description: 'A platform for college students to connect, learn, and grow',
 }
 
-export default function RootLayout({
-                                       children,
-                                   }: {
-    children: React.ReactNode
-}) {
+export default async function RootLayout(
+    {
+        children,
+    }: {
+        children: React.ReactNode
+    }
+) {
+    const session = await getSession();
     return (
         <html lang="en">
         <body className={inter.className}>
-        <AuthProvider>
-            {children}
-            <Toaster/>
-        </AuthProvider>
+        <Providers session={session}>
+            <AuthProvider>
+                {children}
+                <Toaster/>
+            </AuthProvider>
+        </Providers>
         </body>
         </html>
     )

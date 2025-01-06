@@ -13,8 +13,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="TypeScript File" />
         <option value="TypeScript JSX File" />
+        <option value="TypeScript File" />
       </list>
     </option>
   </component>
@@ -43,6 +43,13 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\WEB DEVELOPMENT\DEBUG-OIST\debug-site\src\app\api\auth\[...nextauth]" />
+      <recent name="D:\WEB DEVELOPMENT\DEBUG-OIST\debug-site\src\app" />
+      <recent name="D:\WEB DEVELOPMENT\DEBUG-OIST\debug-site\src\api\discord\add" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="dev" type="js.build_tools.npm" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/package.json" />
@@ -70,7 +77,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1736073780110</updated>
-      <workItem from="1736073786111" duration="12198000" />
+      <workItem from="1736073786111" duration="28298000" />
     </task>
     <servers />
   </component>
