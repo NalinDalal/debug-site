@@ -63,3 +63,4 @@ npm run start
     - Check Kubernetes deployment configurations and logs for issues during deployment.
     - Monitor pod health and container logs.
 - In House creation and registration for events
+- No DataBase to store anything, maybe pull it via docker
