@@ -31,14 +31,13 @@ const authOptions: NextAuthOptions = {
                     return session;
                 }
                 // create a new request
-                await Discord.create({
+                const newReq = new Discord({
                     id: token.sub,
                     email: session.user.email,
                     username: session.user.name,
-                    isAccepted: false,
-                    isRequesting: true,
-                    isDeclined: false
                 });
+                await newReq.save();
+                console.log("New Discord request created:", newReq);
             } catch (error) {
                 console.error("Error during session callback:", error);
                 return session; // Explicitly return null on error

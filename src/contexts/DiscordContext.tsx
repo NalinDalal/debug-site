@@ -6,9 +6,14 @@ import {ToastAction} from "@/components/ui/toast";
 import axios from "axios";
 
 interface Disco {
-    email: string | null;
-    isRequestSent: boolean;
-    isMember: boolean;
+    id: string | null,
+    username: string | null,
+    email: string | null,
+    isRequestSent: boolean,
+    isAccepted: boolean,
+    isDeclined: boolean,
+    isMember: boolean,
+    createdAt: string | null,
 }
 
 interface DiscordContextType {
@@ -36,27 +41,33 @@ export const DiscordProvider: React.FC<{ children: React.ReactNode }> = ({
                                                                          }) => {
     const [loading, setLoading] = useState<boolean>(false);
     const [discordStat, setDiscordStat] = useState<Disco>({
+        id: null,
+        username: null,
         email: null,
+        isRequestSent: false,
+        isAccepted: false,
+        isDeclined: false,
         isMember: false,
-        isRequestSent: false
+        createdAt: null
     });
     const [discordStats, setDiscordStats] = useState<Disco[]>([{
+        id: null,
+        username: null,
         email: null,
+        isRequestSent: false,
+        isAccepted: false,
+        isDeclined: false,
         isMember: false,
-        isRequestSent: false
+        createdAt: null
     }]);
 
     useEffect(() => {
         // Check for saved discord data in localStorage
-        const DiscordUser = localStorage.getItem("discord");
+        const DiscordUser: string | null = localStorage.getItem("discord");
         const Discords = localStorage.getItem("discords");
         if (DiscordUser) {
             const discordStat = JSON.parse(DiscordUser);
-            setDiscordStat({
-                email: discordStat.email,
-                isMember: discordStat.isMember,
-                isRequestSent: discordStat.isRequestSent
-            });
+            setDiscordStat(discordStat);
         }
         if (Discords) {
             const discords = JSON.parse(Discords);
@@ -76,10 +87,17 @@ export const DiscordProvider: React.FC<{ children: React.ReactNode }> = ({
                 throw new Error("An error occurred while sending the request to join the Discord server. Please try again later.")
             }
 
+            const data = await req.data;
+
             setDiscordStat({
-                email,
-                isMember: false,
-                isRequestSent: true
+                id: data.id,
+                username: data.username,
+                email: data.email,
+                isRequestSent: data.isRequestSent,
+                isAccepted: data.isAccepted,
+                isDeclined: data.isDeclined,
+                isMember: data.isMember,
+                createdAt: data.createdAt
             });
             localStorage.setItem("discord", JSON.stringify({
                 email,
@@ -88,9 +106,14 @@ export const DiscordProvider: React.FC<{ children: React.ReactNode }> = ({
             }));
             // update the discord stats in localstorage
             discordStats.push({
-                email,
-                isMember: false,
-                isRequestSent: true
+                id: data.id,
+                username: data.username,
+                email: data.email,
+                isRequestSent: data.isRequestSent,
+                isAccepted: data.isAccepted,
+                isDeclined: data.isDeclined,
+                isMember: data.isMember,
+                createdAt: data.createdAt
             })
             localStorage.setItem("discords", JSON.stringify(discordStats));
             // toast
@@ -125,9 +148,14 @@ export const DiscordProvider: React.FC<{ children: React.ReactNode }> = ({
         try {
             setLoading(true);
             setDiscordStat({
+                id: data.id,
+                username: data.username,
                 email: data.email,
+                isRequestSent: data.isRequestSent,
+                isAccepted: data.isAccepted,
+                isDeclined: data.isDeclined,
                 isMember: data.isMember,
-                isRequestSent: data.isRequestSent
+                createdAt: data.createdAt
             });
             localStorage.setItem("discord", JSON.stringify({
                 email: data.email,
@@ -137,9 +165,14 @@ export const DiscordProvider: React.FC<{ children: React.ReactNode }> = ({
 
             // update the discord stats element in localstorage
             discordStats[discordStats.findIndex((stat) => stat.email === data.email)] = {
+                id: data.id,
+                username: data.username,
                 email: data.email,
+                isRequestSent: data.isRequestSent,
+                isAccepted: data.isAccepted,
+                isDeclined: data.isDeclined,
                 isMember: data.isMember,
-                isRequestSent: data.isRequestSent
+                createdAt: data.createdAt
             };
 
             localStorage.setItem("discords", JSON.stringify(discordStats));
@@ -166,15 +199,19 @@ export const DiscordProvider: React.FC<{ children: React.ReactNode }> = ({
     const getDiscordStats = async () => {
         try {
             // Send a request to the backend to create a new user
-            // await fetch("/api/discord", {
-            //     method: "GET",
-            //     headers: {
-            //         "Content-Type": "application/json"
-            //     },
-            //     body: JSON.stringify(data)
-            // });
-            setDiscordStats(set => [...set, discordStat]);
-            localStorage.setItem("discords", JSON.stringify(discordStats));
+            const res = await fetch("/api/auth/send", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+            });
+
+            const data = await res.json();
+            console.log(data);
+            // update the discord stats in localstorage
+            setDiscordStats(data)
+
+            localStorage.setItem("discords", JSON.stringify(data));
             toast({
                 title: "Success",
                 description: "Discord server stats fetched successfully",

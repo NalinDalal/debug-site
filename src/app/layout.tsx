@@ -5,6 +5,7 @@ import React from "react";
 import {Toaster} from "@/components/ui/toaster";
 import Providers from "@/app/providers";
 import {getSession} from "@/lib/auth";
+import {DiscordProvider} from "@/contexts/DiscordContext";
 
 const inter = Inter({subsets: ['latin']})
 
@@ -26,8 +27,10 @@ export default async function RootLayout(
         <body className={inter.className}>
         <Providers session={session}>
             <AuthProvider>
-                {children}
-                <Toaster/>
+                <DiscordProvider>
+                    {children}
+                    <Toaster/>
+                </DiscordProvider>
             </AuthProvider>
         </Providers>
         </body>

@@ -11,15 +11,13 @@ export async function POST(req: NextRequest) {
         if (discord) return NextResponse.json({error: "Request already exists!"}, {status: 400});
         // create a new request
 
-        await Discord.create({
+        const newUsr
+            = await Discord.create({
             id: userId,
             email,
             username,
-            isAccepted: false,
-            isRequesting: true,
-            isDeclined: false
         });
-        return NextResponse.json({message: "Request sent!"}, {status: 200});
+        return NextResponse.json({message: "Request sent!", newUsr}, {status: 200});
     } catch (error: any) {
         return NextResponse.json({message: "An error occurred while sending the request!", error}, {status: 500});
     }
@@ -28,7 +26,7 @@ export async function POST(req: NextRequest) {
 export async function GET() {
     try {
         await connect();
-        const discord = await Discord.findOne();
+        const discord = await Discord.find();
         if (!discord) return NextResponse.json({error: "Request not found!"}, {status: 404});
         return NextResponse.json(discord, {status: 200});
     } catch (error: any) {
@@ -43,7 +41,12 @@ export async function PUT(req: NextRequest) {
         if (!userId) return NextResponse.json({error: "Missing Parameters!"}, {status: 400});
         const discord = await Discord.findOne({id: userId});
         if (!discord) return NextResponse.json({error: "Request not found!"}, {status: 404});
-        await Discord.updateOne({id: userId}, {isAccepted: true, isRequesting: false, isDeclined: false});
+        await Discord.updateOne({id: userId}, {
+            isAccepted: true,
+            isRequesting: false,
+            isDeclined: false,
+            isMember: true
+        });
         return NextResponse.json({message: "Request accepted!"}, {status: 200});
     } catch (error: any) {
         return NextResponse.json({message: "An error occurred while accepting the request!", error}, {status: 500});
@@ -57,7 +60,12 @@ export async function DELETE(req: NextRequest) {
         if (!userId) return NextResponse.json({error: "Missing Parameters!"}, {status: 400});
         const discord = await Discord.findOne({id: userId});
         if (!discord) return NextResponse.json({error: "Request not found!"}, {status: 404});
-        await Discord.updateOne({id: userId}, {isAccepted: false, isRequesting: false, isDeclined: true});
+        await Discord.updateOne({id: userId}, {
+            isAccepted: false,
+            isRequesting: false,
+            isDeclined: true,
+            isMember: false
+        });
         return NextResponse.json({message: "Request declined!"}, {status: 200});
     } catch (error: any) {
         return NextResponse.json({message: "An error occurred while declining the request!", error}, {status: 500});
@@ -71,7 +79,12 @@ export async function PATCH(req: NextRequest) {
         if (!userId) return NextResponse.json({error: "Missing Parameters!"}, {status: 400});
         const discord = await Discord.findOne({id: userId});
         if (!discord) return NextResponse.json({error: "Request not found!"}, {status: 404});
-        await Discord.updateOne({id: userId}, {isAccepted: false, isRequesting: true, isDeclined: false});
+        await Discord.updateOne({id: userId}, {
+            isAccepted: false,
+            isRequesting: true,
+            isDeclined: false,
+            isMember: false
+        });
         return NextResponse.json({message: "Request updated!"}, {status: 200});
     } catch (error: any) {
         return NextResponse.json({message: "An error occurred while updating the request!", error}, {status: 500});
