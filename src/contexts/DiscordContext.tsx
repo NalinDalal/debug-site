@@ -3,6 +3,7 @@
 import React, {createContext, useContext, useState, useEffect} from "react";
 import {toast} from "@/hooks/use-toast";
 import {ToastAction} from "@/components/ui/toast";
+import axios from "axios";
 
 interface Disco {
     email: string | null;
@@ -14,7 +15,7 @@ interface DiscordContextType {
     discordStat: Disco;
     discordStats: Disco[];
     loading: boolean;
-    sendJoinRequest: (email: string) => Promise<void>;
+    sendJoinRequest: (email: string, userId: string, username: string) => Promise<void>;
     updateDiscordStats: (data: Disco) => void;
     getDiscordStats: () => Promise<void>;
 
@@ -63,19 +64,18 @@ export const DiscordProvider: React.FC<{ children: React.ReactNode }> = ({
         }
     }, []);
 
-    const sendJoinRequest = async (email: string) => {
+    const sendJoinRequest = async (email: string, userId: string, username: string) => {
         setLoading(true);
         try {
-            // Send a request to the backend to create a new user
-            // await fetch("/api/discord", {
-            //     method: "POST",
-            //     headers: {
-            //         "Content-Type": "application/json"
-            //     },
-            //     body: JSON.stringify(data)
-            // });
+            const req = await axios.post('/api/auth/send', {
+                email: email,
+                username: username,
+                userId: userId
+            })
+            if (req.status !== 200) {
+                throw new Error("An error occurred while sending the request to join the Discord server. Please try again later.")
+            }
 
-            // set the discord stats in localstorage
             setDiscordStat({
                 email,
                 isMember: false,

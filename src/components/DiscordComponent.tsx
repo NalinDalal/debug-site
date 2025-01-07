@@ -7,20 +7,31 @@ import {signIn, signOut, useSession} from 'next-auth/react'
 const DiscordComponent: React.FC = () => {
     const {data: session} = useSession();
     const handleSignIn = async () => {
-        await signIn("discord", {
-            redirect: false
-        });
+        try {
+            await signIn("discord", {
+                redirect: false
+            })
+        } catch (e) {
+            console.log("Error while signing in with Discord");
+            console.error(e);
+        }
+
+
     };
 
     useEffect(() => {
         if (session) {
-            console.log(session);
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+            console.log(session?.user?.id);
         }
     }, [session]);
 
     async function handleSignOut() {
-        await signOut({redirect: false});
-
+        await signOut({
+                redirect: false,
+            }
+        )
     }
 
     return (
@@ -55,7 +66,7 @@ const DiscordComponent: React.FC = () => {
                                 variant={"link"}
                                 onClick={handleSignOut}
                                 className={"text-sky-400 text-xs mt-2"}>
-                                Sign in with Discord
+                                logout
                             </Button>
                             </div>
                         </>
