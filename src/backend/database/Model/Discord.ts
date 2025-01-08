@@ -8,6 +8,7 @@ interface IDiscord extends mongoose.Document {
     isAccepted: boolean,
     isDeclined: boolean,
     isMember: boolean,
+    accessToken?: string
 }
 
 const DiscordSchema = new mongoose.Schema<IDiscord>({
@@ -31,6 +32,10 @@ const DiscordSchema = new mongoose.Schema<IDiscord>({
     },
     isMember: {
         type: Boolean, default: false
+    },
+    accessToken: {
+        type: String,
+        default: null
     }
 }, {timestamps: true});
 
