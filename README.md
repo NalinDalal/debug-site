@@ -55,7 +55,7 @@ Admin User:
 
 what is done:
 
-- done with eveything except db
+- done with everything except db
 - done with user auth{not implemented any 3rd party}
 - done with profiles
 - done with sponsors page
@@ -65,7 +65,20 @@ what is done:
 - done with notes
 - done with timeline page
 
-most of work is done b/w 2:30 pm to 12:00 am 25.12.2024
+- #### by [Aryan Kumar](https://github.com/aryankumarofficial):
+  - #### Done with backend:
+    - #### user sends join request to the guild
+    - #### Admin can see the incoming requests
+    - #### Admin can accept or reject the requests
+    - #### Admin can see the list of all the members
+    - #### Admin can see the list of all the roles in the guild
+    - #### Admin can add or remove roles
+    
+  - #### Done with frontend:
+    - #### User can send the request to join the guild
+    - #### Admin can see the incoming requests
+
+most work is done b/w 2:30 pm to 12:00 am 25.12.2024
 
 production branch:
 
