@@ -153,6 +153,7 @@ export const columns: ColumnDef<Disco>[] = [
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuSeparator className={"mx-auto"}/>
                         <DropdownMenuItem
+                            className={"hover:!bg-blue-500 hover:!text-white cursor-pointer"}
                             onClick={async () => {
                                 await navigator.clipboard.writeText(disco.id || "")
                                 toast({
@@ -169,8 +170,11 @@ export const columns: ColumnDef<Disco>[] = [
                         >
                             Copy ID
                         </DropdownMenuItem>
-                        <DropdownMenuItem className={"hover:!bg-red-500"}>
+                        <DropdownMenuItem className={"hover:!bg-green-500 hover:!text-white cursor-pointer"}>
                             Accept
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className={"hover:!bg-red-500 hover:!text-white cursor-pointer"}>
+                            Decline
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>

@@ -48,7 +48,7 @@
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "<unknown>",
+    "git-widget-placeholder": "main",
     "last_opened_file_path": "D:/WEB DEVELOPMENT/DEBUG-OIST",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -56,7 +56,7 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "npm.dev.executor": "Run",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "settings.editor.selected.configurable": "settings.sync",
     "ts.external.directory.path": "D:\\WEB DEVELOPMENT\\DEBUG-OIST\\debug-site\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   },
@@ -102,7 +102,7 @@
       <option name="presentableId" value="Default" />
       <updated>1736073780110</updated>
       <workItem from="1736073786111" duration="40662000" />
-      <workItem from="1736249801157" duration="9837000" />
+      <workItem from="1736249801157" duration="11876000" />
     </task>
     <servers />
   </component>
