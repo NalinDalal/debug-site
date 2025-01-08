@@ -1,25 +1,32 @@
-import {NextResponse} from "next/server";
+import {NextRequest} from "next/server";
 
-export async function GET() {
-    const DISCORD_API_URL = "https://discord.com/api/v10";
-    const guildId = process.env.DISCORD_SERVER_ID;
-    const botToken = process.env.DISCORD_BOT_TOKEN;
-    console.log("tokens: ", guildId, botToken);
+const DISCORD_API_URL = "https://discord.com/api/v10";
+
+export async function POST(req: NextRequest) {
     try {
-        const response = await fetch(`${DISCORD_API_URL}/guilds/${guildId}/roles`, {
-            method: "GET",
-            headers: {
-                Authorization: `Bot ${botToken}`
-            },
-        });
-        if (!response.ok) {
-            console.log(`Failed to fetch roles from Discord API. Status:`, response);
-            return NextResponse.json({error: `Failed to fetch roles from Discord AP`}, {status: 400});
+        const {userId, roleId} = await req.json();
+        const guildId = process.env.DISCORD_SERVER_ID;
+        const botToken = process.env.DISCORD_BOT_TOKEN;
+
+        if (!userId || !roleId) {
+            return new Response("Missing userId or roleId", {status: 400});
         }
-        const roles = await response.json();
-        return NextResponse.json({roles, success: true}, {status: 200});
+
+        const res = await fetch(`${DISCORD_API_URL}/guilds/${guildId}/members/${userId}/roles/${roleId}`, {
+            method: "PUT",
+            headers: {
+                Authorization: `Bot ${botToken}`,
+                'Content-Type': 'application/json',
+            }
+        })
+        if (!res.ok) {
+            console.error("Failed to add role to user", res);
+            return new Response("Failed to add role to user", {status: 400});
+        }
+
+        return new Response("Role added to user", {status: 200});
     } catch (error) {
-        console.error("Failed to fetch roles from Discord API", error);
-        return NextResponse.json({error: "Failed to fetch roles from Discord API"}, {status: 500});
+        console.error("Failed to add role to user", error);
+        return new Response("Failed to add role to user", {status: 500});
     }
 }
