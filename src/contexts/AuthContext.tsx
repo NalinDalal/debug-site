@@ -35,7 +35,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
     const login = async (email: string, password: string) => {
         // Mock login logic
-        console.log(password); // Log password or add validation logic if needed
+        console.log(password); // Log password or assign validation logic if needed
 
         // Replace with actual backend logic to validate user and retrieve role
         const mockUser: User = {
