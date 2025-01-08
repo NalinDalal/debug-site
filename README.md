@@ -1,8 +1,33 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This is a [Next.js](https://nextjs.org) project bootstrapped with [
+`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
 
-First, run the development server:
+- ### Add the following environment variables in a `.env.local` file in the root of the project:
+    - #### get the following from [discord developer portal](https://discord.com/developers/applications)
+        - DISCORD_APP_ID
+        - DISCORD_PUBLIC_KEY
+        - DISCORD_CLIENT_ID
+        - DISCORD_CLIENT_SECRET
+        - DISCORD_BOT_TOKEN
+        - NEXT_PUBLIC_DISCORD_BOT_TOKEN
+        - DISCORD_SERVER_ID
+
+```bash
+DISCORD_APP_ID=your_app_id_here
+DISCORD_PUBLIC_KEY=yout_public_key_here
+NEXT_PUBLIC_DISCORD_BOT_TOKEN=yout_bot_token_here
+DISCORD_SERVER_ID=yout_server_id_here
+DISCORD_CLIENT_ID=yout_client_id_here
+DISCORD_CLIENT_SECRET=your_app_id_here
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your_secret_here
+DISCORD_BOT_TOKEN=yout_bot_token_here
+MONGODB_URI=mongodb://0.0.0.0:27017/debug-oist
+
+```
+
+- ### First, run the development server:
 
 ```bash
 npm run dev
@@ -58,8 +83,8 @@ npm run start
 - new relic setup for monitoring, logging
 - allow for code-editor like repl.it
 - Kubernetes Containerization
-  - Debugging Steps:
-    - Ensure the application is properly containerized and works locally.
-    - Check Kubernetes deployment configurations and logs for issues during deployment.
-    - Monitor pod health and container logs.
+    - Debugging Steps:
+        - Ensure the application is properly containerized and works locally.
+        - Check Kubernetes deployment configurations and logs for issues during deployment.
+        - Monitor pod health and container logs.
 - In House creation and registration for events

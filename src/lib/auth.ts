@@ -48,7 +48,6 @@ const authOptions: NextAuthOptions = {
     },
 };
 
-// Export `getSession` utility function
 const getSession = () => getServerSession(authOptions);
 
 export {authOptions, getSession};
