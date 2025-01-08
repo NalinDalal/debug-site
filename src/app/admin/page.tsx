@@ -16,7 +16,7 @@ import {Label} from "@/components/ui/label";
 import {Textarea} from "@/components/ui/textarea";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {useDiscord} from "@/contexts/DiscordContext";
-import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
+import {DataTable} from "@/components/DataTable";
 
 export default function AdminPage() {
     const {isAdmin} = useAuth();
@@ -268,38 +268,7 @@ export default function AdminPage() {
                                 </CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <Table>
-                                    <TableCaption>Discord Join Requests</TableCaption>
-                                    <TableHeader>
-                                        <TableRow>
-                                            <TableHead>Username</TableHead>
-                                            <TableHead>Email</TableHead>
-                                            <TableHead>Request Status</TableHead>
-                                            <TableHead>Membership Status</TableHead>
-                                            <TableHead>Actions</TableHead>
-                                        </TableRow>
-                                    </TableHeader>
-                                    <TableBody>
-                                        {discordStats.map((request) => (
-                                            <TableRow key={request.id}>
-                                                <TableCell className={"font-medium"}>{request.username}</TableCell>
-                                                <TableCell>{request.email}</TableCell>
-                                                <TableCell>{request.isRequestSent ? "Pending" : "Approved"}</TableCell>
-                                                <TableCell>{request.isMember ? "Member" : "Unverified"}</TableCell>
-                                                <TableCell>
-                                                    <Button
-                                                        className={"bg-green-500 text-white px-4 py-2 rounded-md mr-2 hover:bg-green-600 transition-colors"}>
-                                                        Approve
-                                                    </Button>
-                                                    <Button
-                                                        className={"bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors"}>
-                                                        Deny
-                                                    </Button>
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
+                                <DataTable data={discordStats}/>
                             </CardContent>
                         </Card>
                     </TabsContent>
@@ -308,3 +277,4 @@ export default function AdminPage() {
         </>
     );
 }
+
