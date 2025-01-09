@@ -56,7 +56,6 @@ export interface Disco {
     isAccepted: boolean;
     isDeclined: boolean;
     isMember: boolean;
-    createdAt: string | null;
 }
 
 export interface TableDataProps {

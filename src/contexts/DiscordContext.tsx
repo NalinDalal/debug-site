@@ -1,6 +1,6 @@
 "use client";
 
-import React, {createContext, useContext, useState, useCallback, useMemo} from "react";
+import React, {createContext, useContext, useState, useCallback, useMemo, useEffect} from "react";
 import {toast} from "@/hooks/use-toast";
 import {ToastAction} from "@/components/ui/toast";
 import axios from "axios";
@@ -13,7 +13,6 @@ interface Disco {
     isAccepted: boolean;
     isDeclined: boolean;
     isMember: boolean;
-    createdAt: string | null;
 }
 
 interface DiscordContextType {
@@ -21,7 +20,7 @@ interface DiscordContextType {
     discordStats: Disco[];
     roles: any[];
     loading: boolean;
-    sendJoinRequest: (email: string, userId: string, username: string) => Promise<void>;
+    sendJoinRequest: (email: string) => Promise<void>;
     updateDiscordStats: (data: Disco) => void;
     getDiscordStats: () => Promise<void>;
     addRole: (name: string, color: string) => Promise<void>;
@@ -44,7 +43,7 @@ export const DiscordProvider: React.FC<{ children: React.ReactNode }> = ({childr
     const [loading, setLoading] = useState(false);
     const [roles, setRoles] = useState<any[]>([]);
     const [discordStat, setDiscordStat] = useState<Disco>(() => {
-        const storedData = localStorage.getItem("discord");
+        const storedData = typeof window !== "undefined" ? localStorage.getItem("discord") : null;
         return storedData ? JSON.parse(storedData) : {
             id: null,
             username: null,
@@ -53,18 +52,40 @@ export const DiscordProvider: React.FC<{ children: React.ReactNode }> = ({childr
             isAccepted: false,
             isDeclined: false,
             isMember: false,
-            createdAt: null,
         };
     });
 
     const [discordStats, setDiscordStats] = useState<Disco[]>(() => {
-        const storedData = localStorage.getItem("discords");
+        const storedData = typeof window !== "undefined" ? localStorage.getItem("discords") : null;
         return storedData ? JSON.parse(storedData) : [];
     });
 
     const saveToLocalStorage = useCallback((key: string, value: any) => {
         localStorage.setItem(key, JSON.stringify(value));
     }, []);
+
+    const updateStateFromLocalStorage = useCallback(() => {
+        if (typeof window !== "undefined") {
+            const storedDiscord = localStorage.getItem("discord");
+            const storedDiscords = localStorage.getItem("discords");
+            if (storedDiscord) setDiscordStat(JSON.parse(storedDiscord));
+            if (storedDiscords) setDiscordStats(JSON.parse(storedDiscords));
+        }
+    }, []);
+
+    // Sync state with local storage whenever there's a change in local storage values
+    useEffect(() => {
+        updateStateFromLocalStorage();
+
+        const handleStorageChange = () => {
+            updateStateFromLocalStorage();
+        };
+
+        window.addEventListener("storage", handleStorageChange);
+        return () => {
+            window.removeEventListener("storage", handleStorageChange);
+        };
+    }, [updateStateFromLocalStorage]);
 
     const showToast = useCallback((title: string, description: string, variant: "default" | "destructive") => {
         toast({
@@ -83,28 +104,34 @@ export const DiscordProvider: React.FC<{ children: React.ReactNode }> = ({childr
         });
     }, []);
 
-    const sendJoinRequest = useCallback(async (email: string, userId: string, username: string) => {
+    const sendJoinRequest = useCallback(async (userId: string) => {
         setLoading(true);
         try {
-            const {data} = await axios.post("/api/auth/send", {email, username, userId});
+            console.log("joining discord server");
+            console.log("userId", userId);
+            const res = await axios.get(`${process.env.NEXTAUTH_URL}/api/discord/users/${userId}`);
 
-            const newStat = {
-                id: data.id,
-                username: data.username,
-                email: data.email,
-                isRequestSent: data.isRequestSent,
-                isAccepted: data.isAccepted,
-                isDeclined: data.isDeclined,
-                isMember: data.isMember,
-                createdAt: data.createdAt,
-            };
+            const data = await res.data;
 
-            setDiscordStat(newStat);
-            setDiscordStats((prev) => [...prev, newStat]);
-            saveToLocalStorage("discord", newStat);
-            saveToLocalStorage("discords", [...discordStats, newStat]);
+            console.log("data", data);
+            if (data) {
+                const newStat = {
+                    id: data.id,
+                    username: data.username,
+                    email: data.email,
+                    isRequestSent: data.isRequestSent,
+                    isAccepted: data.isAccepted,
+                    isDeclined: data.isDeclined,
+                    isMember: data.isMember,
+                };
 
-            showToast("Success", "Discord server request sent successfully", "default");
+                setDiscordStat(newStat);
+                setDiscordStats((prev) => [...prev, newStat]);
+                saveToLocalStorage("discord", newStat);
+                saveToLocalStorage("discords", [...discordStats, newStat]);
+                console.log("newStat", newStat);
+                showToast("Success", "Discord server request sent successfully", "default");
+            }
         } catch (error) {
             console.error(error);
             showToast("Error", "An error occurred while sending the request to join the Discord server.", "destructive");

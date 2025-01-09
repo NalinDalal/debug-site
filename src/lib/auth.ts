@@ -15,55 +15,62 @@ const authOptions: NextAuthOptions = {
             authorization: {
                 params: {
                     scope: "identify email guilds.join",
-                }
-            }
+                },
+            },
         }),
     ],
+    secret: process.env.NEXTAUTH_SECRET,
+    pages: {
+        error: "/auth/error",
+    },
     debug: process.env.NODE_ENV === "development",
     callbacks: {
-        async jwt({token, account, session, trigger, user, profile}) {
-            console.log("tokenoid:", {token, account, session, trigger, user, profile});
-
-            if (account) {
-                token.accessToken = account.accessToken;
+        async jwt({token, account}) {
+            // Add the access token to the JWT if available
+            if (account?.access_token) {
+                token.accessToken = account.access_token;
             }
+
+            // Ensure database connection and handle user data
             try {
                 await connect();
-                const newDiscord = await Discord.findOne({id: token.sub});
-                if (newDiscord) {
-                    return this.jwt;
+
+                const existingDiscordUser = await Discord.findOne({id: token.sub});
+                if (!existingDiscordUser) {
+                    // If user does not exist in the database, create a new record
+                    const newUser = new Discord({
+                        id: token.sub,
+                        email: token.email,
+                        username: token.name,
+                        accessToken: account?.access_token,
+                    });
+                    await newUser.save();
+                    console.log("New Discord user saved:", newUser);
+                } else {
+                    // If user already exists, update the access token
+                    existingDiscordUser.accessToken = account?.access_token;
+                    existingDiscordUser.isRequestSent = true;
+                    await existingDiscordUser.save();
+                    console.log("Discord user updated:", existingDiscordUser);
                 }
-                // create a new request
-                const newReq = new Discord({
-                    id: token.sub,
-                    email: token.email,
-                    username: token.name,
-                    accessToken: account?.access_token,
-                });
-                await newReq.save();
-                console.log("New Discord request created:", newReq);
+
             } catch (error) {
-                console.error("Error during session callback:", error);
-                return session; // Explicitly return null on error
+                console.error("Error in jwt callback:", error);
             }
-            return {token: token};
+
+            return token;
         },
+
         async session({token, session}) {
-            if (!token || !session.user) {
-                return session; // Return the unchanged session
+            if (token) {
+                // Pass user ID and access token to the session object
+                (session.user as { id?: string }).id = token.sub as string;
+                (session.user as { accessToken?: string }).accessToken = token.accessToken as string;
             }
 
-            // Assign token's sub (user ID) to the session
-            (session.user as { id: string }).id = token.sub as string;
-
-            // Pass the access token to the session object
-            (session.user as { accessToken: string }).accessToken = token.accessToken as string;
-
-
-            return session; // Explicitly return the modified session
+            return session;
         },
     },
-
 };
 
 const getSession = () => getServerSession(authOptions);

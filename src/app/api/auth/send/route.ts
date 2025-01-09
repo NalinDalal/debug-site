@@ -90,3 +90,6 @@ export async function PATCH(req: NextRequest) {
         return NextResponse.json({message: "An error occurred while updating the request!", error}, {status: 500});
     }
 }
+
+// get the user by id
+

@@ -1,6 +1,6 @@
 import mongoose, {Model} from "mongoose"
 
-interface IDiscord extends mongoose.Document {
+export interface IDiscord extends mongoose.Document {
     id: string,
     username: string,
     email: string,
@@ -39,6 +39,6 @@ const DiscordSchema = new mongoose.Schema<IDiscord>({
     }
 }, {timestamps: true});
 
-const Discord: Model<IDiscord> = mongoose.models.Discord || mongoose.model<IDiscord>("Discord", DiscordSchema);
+const Discord: Model<IDiscord> = mongoose?.models?.Discords || mongoose.model<IDiscord>("Discords", DiscordSchema);
 
 export default Discord;
