@@ -19,7 +19,7 @@ const DiscordSchema = new mongoose.Schema<IDiscord>({
         type: String, required: true
     },
     email: {
-        type: String, required: true
+        type: String, required: false
     },
     isRequestSent: {
         type: Boolean, default: true

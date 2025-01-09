@@ -22,6 +22,7 @@ const authOptions: NextAuthOptions = {
     secret: process.env.NEXTAUTH_SECRET,
     pages: {
         error: "/auth/error",
+        signIn: "/discord",
     },
     debug: process.env.NODE_ENV === "development",
     callbacks: {
