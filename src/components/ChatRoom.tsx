@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -10,7 +9,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Video, Mic, MicOff, PhoneOff } from "lucide-react";
-import { io, Socket } from "socket.io-client"; // Import Socket type
+import { io, Socket } from "socket.io-client";
+import useAuthStore from "@/store/Auth"; // Import Socket type
 
 interface Message {
   id: string;
@@ -24,7 +24,7 @@ interface ChatRoomProps {
 }
 
 export function ChatRoom({ roomName }: ChatRoomProps) {
-  const { user } = useAuth();
+  const { user } = useAuthStore();
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [isInCall, setIsInCall] = useState(false);

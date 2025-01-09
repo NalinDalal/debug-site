@@ -2,7 +2,6 @@
 
 import React, {useEffect, useState} from "react";
 import {Header} from "@/components/Header";
-import {useAuth} from "@/contexts/AuthContext";
 import {Button} from "@/components/ui/button";
 import {
     Card,
@@ -17,9 +16,10 @@ import {Textarea} from "@/components/ui/textarea";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {useDiscord} from "@/contexts/DiscordContext";
 import {DataTable} from "@/components/DataTable";
+import useAuthStore from "@/store/Auth";
 
 export default function AdminPage() {
-    const {isAdmin} = useAuth();
+    const {isAdmin} = useAuthStore();
     const {getDiscordStats, discordStats} = useDiscord();
     const [clubData, setClubData] = useState({
         name: "",

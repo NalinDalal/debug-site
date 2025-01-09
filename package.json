@@ -27,6 +27,7 @@
     "discord.js": "^14.17.2",
     "emailjs-com": "^3.2.0",
     "framer-motion": "^11.15.0",
+    "immer": "^10.1.1",
     "jspdf": "^2.5.2",
     "lucide-react": "^0.469.0",
     "mongoose": "^8.9.3",
@@ -45,7 +46,8 @@
     "sonner": "^1.7.1",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
-    "zod": "^3.24.1"
+    "zod": "^3.24.1",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

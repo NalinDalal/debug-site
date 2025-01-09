@@ -1,5 +1,4 @@
 "use client";
-import {useAuth} from "@/contexts/AuthContext"; // Import the custom useAuth hook
 import Link from "next/link";
 import {Button} from "@/components/ui/button";
 import {Header} from "@/components/Header";
@@ -13,10 +12,11 @@ import {
 import {FaFacebook, FaTwitter, FaInstagram, FaLinkedin} from "react-icons/fa";
 import {useEffect} from "react";
 import {useSession} from "next-auth/react";
+import useAuthStore from "@/store/Auth";
 
 export default function Home() {
     const {data: session} = useSession();
-    const {user} = useAuth(); // Use context to get the user data
+    const {user} = useAuthStore(); // Use context to get the user data
     useEffect(() => {
         console.log("data: ", session?.user?.email)
     }, [])

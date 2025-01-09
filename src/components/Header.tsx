@@ -2,12 +2,12 @@
 "use client";
 
 import Link from "next/link";
-import {useAuth} from "@/contexts/AuthContext";
 import {Button} from "@/components/ui/button";
 import Image from "next/image";
+import useAuthStore from "@/store/Auth";
 
 export function Header() {
-    const {user, logout, isAdmin} = useAuth();
+    const {user, logout, isAdmin} = useAuthStore();
 
     // Logout function to handle redirect after logging out
     const handleLogout = () => {
