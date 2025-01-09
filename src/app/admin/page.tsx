@@ -1,6 +1,6 @@
 "use client";
 
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {Header} from "@/components/Header";
 import {Button} from "@/components/ui/button";
 import {
@@ -14,13 +14,13 @@ import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import {Textarea} from "@/components/ui/textarea";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
-import {useDiscord} from "@/contexts/DiscordContext";
 import {DataTable} from "@/components/DataTable";
 import useAuthStore from "@/store/Auth";
+import useDiscord from "@/store/Discord";
 
 export default function AdminPage() {
     const {isAdmin} = useAuthStore();
-    const {getDiscordStats, discordStats} = useDiscord();
+    const {allUsers} = useDiscord();
     const [clubData, setClubData] = useState({
         name: "",
         description: "",
@@ -38,10 +38,6 @@ export default function AdminPage() {
     //     isRequestSent: false,
     //     isMember: false,
     // }]);
-
-    useEffect(() => {
-        getDiscordStats()
-    }, []);
 
 
     if (!isAdmin) {
@@ -268,7 +264,7 @@ export default function AdminPage() {
                                 </CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <DataTable data={discordStats}/>
+                                <DataTable data={allUsers}/>
                             </CardContent>
                         </Card>
                     </TabsContent>

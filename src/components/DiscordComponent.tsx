@@ -3,21 +3,21 @@ import React from "react";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
 import {Button} from "@/components/ui/button";
 import {signIn, signOut, useSession} from 'next-auth/react'
-import {useDiscord} from "@/contexts/DiscordContext";
 import {useRouter} from "next/navigation";
+import useDiscord from "@/store/Discord";
 
 const DiscordComponent: React.FC = () => {
     const router = useRouter();
     const {data: session} = useSession();
-    const {discordStat} = useDiscord();
+    const {user} = useDiscord();
     const handleSignIn = async () => {
         try {
-            if (discordStat.isMember) {
+            if (user && user.isMember) {
                 router.push("https://discord.gg/aRVRz8wh");
                 return;
             }
             console.log("sending join request");
-            await signIn("discord", {callbackUrl: "/discord/redirect"})
+            await signIn("discord")
         } catch (e) {
             console.log("Error while signing in with Discord");
             console.error(e);
@@ -51,8 +51,8 @@ const DiscordComponent: React.FC = () => {
                         className={"bg-sky-400 text-white px-4 py-2 rounded-md mt-4 hover:bg-sky-500 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"}
                         disabled={!!session}>
                         {session ? (
-                            discordStat.isMember ? "Go to the server" :
-                                discordStat.isRequestSent ? "Request Sent" : "Join Now"
+                            user?.isMember ? "Go to the server" :
+                                user?.isRequestSent ? "Request Sent" : "Join Now"
                         ) : "Sign in with Discord"}
 
                     </Button>
