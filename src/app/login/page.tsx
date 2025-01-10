@@ -26,7 +26,7 @@ export default function LoginPage() {
         e.preventDefault();
         try {
             await login(email, password);
-            router.push("/profile");
+            router.back();
         } catch (error) {
             console.error("Login failed:", error);
         }

@@ -2,7 +2,6 @@
 import React, {useEffect} from "react";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
 import {Button} from "@/components/ui/button";
-import {signOut, useSession} from 'next-auth/react'
 import useDiscord from "@/store/Discord";
 import {useRouter, useSearchParams} from "next/navigation";
 
@@ -11,8 +10,7 @@ const DiscordComponent = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const query = searchParams.get("code");
-    const {data: session} = useSession();
-    const {user, sendJoinRequest, verifyUser} = useDiscord();
+    const {user, sendJoinRequest, verifyUser, logout} = useDiscord();
     const handleSignIn = async () => {
         try {
             await sendJoinRequest();
@@ -34,10 +32,7 @@ const DiscordComponent = () => {
     }, [query])
 
     async function handleSignOut() {
-        await signOut({
-                redirect: false,
-            }
-        )
+        await logout();
     }
 
     if (!query) {
@@ -58,14 +53,13 @@ const DiscordComponent = () => {
                             variant={"default"}
                             onClick={handleSignIn}
                             className={"bg-sky-400 text-white px-4 py-2 rounded-md mt-4 hover:bg-sky-500 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"}
-                            disabled={!!session}>
-                            {session ? (
-                                user?.isMember ? "Go to the server" :
-                                    user?.isRequestSent ? "Request Sent" : "Join Now"
-                            ) : "Sign in with Discord"}
+                            disabled={!!user}>
+                            {
+                                user ? user.isMember ? "Go to the Server" : "Join request sent" : "Join with Discord"
+                            }
 
                         </Button>
-                        {!session ?
+                        {!user ?
                             <span
                                 className={"text-xs mt-2 text-gray-400"}>You need to sign in with Discord to join our
                     server.</span> :

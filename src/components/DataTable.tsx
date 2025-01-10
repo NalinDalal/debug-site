@@ -102,16 +102,16 @@ export const columns: ColumnDef<Disco>[] = [
         cell: ({row}) => <div className="capitalize">{row.getValue("username")}</div>,
     },
     {
-        accessorKey: "email",
+        accessorKey: "isRequestSent",
         header: ({column}) => (
             <Button
                 variant="ghost"
                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-                Email <ArrowUpDown/>
+                className={"capitalize my-1 -ml-4"}
+            >Request Status <ArrowUpDown/>
             </Button>
         ),
-        cell: ({row}) => <div className="lowercase">{row.getValue("email")}</div>,
+        cell: ({row}) => (<div className="capitalize">{row.getValue("isRequestSent") ? "Requested" : "Declined"}</div>),
     },
     {
         accessorKey: "isMember",
@@ -122,7 +122,7 @@ export const columns: ColumnDef<Disco>[] = [
     },
     {
         accessorKey: "createdAt",
-        header: "Created At",
+        header: "Requested At",
         cell: ({row}) => {
             const date: Date = row.getValue("createdAt");
             return <div>{date ? new Date(date).toLocaleDateString("en-US"
@@ -139,7 +139,6 @@ export const columns: ColumnDef<Disco>[] = [
         enableHiding: false,
         cell: ({row}) => {
             const disco = row.original;
-
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -224,10 +223,10 @@ export function DataTable({data}: TableDataProps) {
         <div className="w-full">
             <div className="flex items-center py-4">
                 <Input
-                    placeholder="Filter by email..."
-                    value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+                    placeholder="Filter by username..."
+                    value={(table.getColumn("username")?.getFilterValue() as string) ?? ""}
                     onChange={(event) =>
-                        table.getColumn("email")?.setFilterValue(event.target.value)
+                        table.getColumn("username")?.setFilterValue(event.target.value)
                     }
                     className="max-w-sm"
                 />
