@@ -1,6 +1,6 @@
 "use client";
 
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Header} from "@/components/Header";
 import {Button} from "@/components/ui/button";
 import {
@@ -20,7 +20,7 @@ import useDiscord from "@/store/Discord";
 
 export default function AdminPage() {
     const {isAdmin} = useAuthStore();
-    const {allUsers} = useDiscord();
+    const {allUsers, getUsers} = useDiscord();
     const [clubData, setClubData] = useState({
         name: "",
         description: "",
@@ -39,6 +39,9 @@ export default function AdminPage() {
     //     isMember: false,
     // }]);
 
+    useEffect(() => {
+        getUsers();
+    }, []);
 
     if (!isAdmin) {
         return (

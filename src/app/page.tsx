@@ -10,16 +10,10 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import {FaFacebook, FaTwitter, FaInstagram, FaLinkedin} from "react-icons/fa";
-import {useEffect} from "react";
-import {useSession} from "next-auth/react";
 import useAuthStore from "@/store/Auth";
 
 export default function Home() {
-    const {data: session} = useSession();
     const {user} = useAuthStore(); // Use context to get the user data
-    useEffect(() => {
-        console.log("data: ", session?.user?.email)
-    }, [])
 
     return (
         <>

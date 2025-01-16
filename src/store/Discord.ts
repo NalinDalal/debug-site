@@ -18,6 +18,7 @@ interface DiscordState {
     hydrated: boolean | null;
     setHydrated: () => void;
     sendJoinRequest: () => Promise<void>;
+    logout: () => Promise<void>;
     updateUser: (user: User) => Promise<void>;
     getUsers: () => Promise<void>;
     addRole: (role: Roles, color: string) => Promise<void>;
@@ -81,7 +82,7 @@ const useDiscord = create<DiscordState>()(devtools(persist(immer((set, get) => (
                 set({
                     user: user,
                     error: null,
-                    allUsers: get().allUsers.map((u) => u.id === user.id ? user : u)
+                    allUsers: [...get().allUsers.filter((u) => u.id !== user.id), user],
                 })
 
             } catch (e: any) {
@@ -223,7 +224,6 @@ const useDiscord = create<DiscordState>()(devtools(persist(immer((set, get) => (
         },
         verifyUser: async (code: string) => {
             try {
-                console.log("codezd", code);
                 set({
                     loading: true
                 })
@@ -261,7 +261,8 @@ const useDiscord = create<DiscordState>()(devtools(persist(immer((set, get) => (
                 });
                 set({
                     user: data.data.user,
-                    allUsers: [...get().allUsers, data.data.user],
+                    // push the user only if it doesn't exist in the array otherwise update it
+                    allUsers: [...get().allUsers.filter((u) => u.id !== data.data.user.id), data.data.user],
                     error: null,
                 })
 
@@ -285,6 +286,30 @@ const useDiscord = create<DiscordState>()(devtools(persist(immer((set, get) => (
                     user: null,
                 })
                 showToast("error", "An error occurred while fetching the user.", "destructive");
+            } finally {
+                set({
+                    loading: false
+                })
+            }
+        },
+        logout: async () => {
+            try {
+                set({
+                    loading: true
+                })
+                set({
+                    user: null,
+                    accessToken: null,
+                    error: null,
+                })
+                showToast("success", "User logged out successfully", "default");
+
+            } catch (e: any) {
+                console.log("Error while logging out: ", e);
+                set({
+                    error: e.message,
+                })
+                showToast("error", "An error occurred while logging out the user.", "destructive");
             } finally {
                 set({
                     loading: false
