@@ -80,6 +80,9 @@ what is done:
 
 most work is done b/w 2:30 pm to 12:00 am 25.12.2024
 
+16.01.2025
+- Added a alumni page, need to populate it.
+
 production branch:
 
 ```bash
@@ -102,3 +105,8 @@ npm run start
         - Monitor pod health and container logs.
 - In House creation and registration for events
 - No DataBase to store anything, maybe pull it via docker
+
+
+
+src/app/alumni/page.tsx-> see it works only for half scroll, on full scroll it
+renders only whitepage
